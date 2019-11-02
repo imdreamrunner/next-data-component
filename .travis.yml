@@ -12,5 +12,7 @@ jobs:
 after_success:
   - echo success
 branches:
+  only:
+    - master
   except:
     - /^v\d+\.\d+\.\d+$/ # versions like v1.0.0
