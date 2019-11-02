@@ -1,9 +1,4 @@
 language: node_js
-cache:
-  directories:
-    - ~/.npm
-notifications:
-  email: false
 node_js:
   - '10'
   - '11'
@@ -15,4 +10,4 @@ after_success:
   - echo success
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+    - /^v\d+\.\d+\.\d+$/  # versions like v1.0.0
