@@ -4,18 +4,19 @@ import * as React from 'react';
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 type Subtract<T, K> = Omit<T, keyof K>;
 
-export interface NextDataComponent<D, P> {
-  getInitialProps: (cid: string, ctx: NextPageContext, deps: Partial<D>) => Promise<P>;
+/**
+ * D: Dependencies
+ * PD: Produced data
+ */
+export interface NextDataComponent<D, PD> {
+  getInitialProps: (cid: string, ctx: NextPageContext, deps: D) => Promise<PD>;
 }
 
 /**
  * D: Dependencies
  * PD: Produced data
  */
-export type ComponentInitialPropsFunction<D, PD> = (
-  ctx: NextPageContext,
-  deps: Partial<D>
-) => Promise<PD>;
+export type ComponentInitialPropsFunction<D, PD> = (ctx: NextPageContext, deps: D) => Promise<PD>;
 
 export interface DataComponentProps {
   cid: string;
@@ -44,7 +45,11 @@ export default function withInitialProps<P, D, PD>(
       // This branch will only be executed when the getInitialProps is executed in server
       // and the component is being hydrated in client.
       // If the getInitialProps is executed in browser, it doesn't go here.
-      if (typeof window === 'undefined') {
+      if (
+        typeof window === 'undefined' ||
+        (typeof (window as any).__COMPONENT_DATA__ !== 'object' ||
+          !(window as any).__COMPONENT_DATA__.hasOwnProperty(props.cid))
+      ) {
         throw new Error('Component is rendered without its getInitialProps being called.');
       }
       producedProps = (window as any).__COMPONENT_DATA__[props.cid];
@@ -74,11 +79,12 @@ export default function withInitialProps<P, D, PD>(
   ComponentWithInitialProps.getInitialProps = async (
     cid: string,
     ctx: NextPageContext,
-    deps: Partial<D>
+    deps: D
   ) => {
     getInitialPropsExecuted = true;
     producedProps = await getInitialProps(ctx, deps);
     if (typeof window !== 'undefined') {
+      (window as any).__COMPONENT_DATA__ = (window as any).__COMPONENT_DATA__ || {};
       (window as any).__COMPONENT_DATA__[cid] = producedProps;
     }
     return producedProps;
