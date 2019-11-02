@@ -3,14 +3,20 @@ node_js:
   - '12'
   - '10'
   - '8'
+script:
+  - npm run test:prod
+  - npm run build
+  # TODO Add integration test here
 jobs:
   include:
-    - stage: test
-      script: npm run test:prod
-    - stage: build
-      script: npm run build
-after_success:
-  - echo success
+    - stage: deploy
+      script: skip
+      node_js: '12'
+      deploy: &github
+        provider: releases
+        on:
+          tags: true
+        skip_cleanup: true
 branches:
   only:
     - master
