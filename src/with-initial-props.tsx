@@ -1,5 +1,5 @@
 import { NextPageContext } from 'next';
-import React from 'react';
+import * as React from 'react';
 
 type Omit<T, K> = Pick<T, Exclude<keyof T, K>>;
 type Subtract<T, K> = Omit<T, keyof K>;
@@ -57,6 +57,7 @@ export default function withInitialProps<P, D, PD>(
 
     const data = (
       <script
+        suppressHydrationWarning={true}
         dangerouslySetInnerHTML={{
           __html: scriptTagHtml
         }}
