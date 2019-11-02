@@ -1,13 +1,12 @@
 language: node_js
 node_js:
+  - '12'
   - '10'
-  - '11'
   - '8'
-  - '6'
 script:
   - npm run test:prod && npm run build
 after_success:
   - echo success
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/  # versions like v1.0.0
+    - /^v\d+\.\d+\.\d+$/ # versions like v1.0.0
