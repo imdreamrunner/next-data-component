@@ -1,0 +1,12 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "module": "es6",
+    "outDir": "dist/es",
+    "typeRoots": ["node_modules/@types"],
+    "declaration": true,
+    "declarationDir": "dist/types"
+  },
+  "include": ["src"],
+  "exclude": ["**/*.test.*"]
+}
