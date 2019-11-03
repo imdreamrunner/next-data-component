@@ -1,12 +1,13 @@
+dist: xenial
+services:
+  - xvfb
 language: node_js
 node_js:
   - '12'
-  - '10'
-  - '8'
 script:
-  - npm run test:prod
+  - npm run lint
   - npm run build
-  # TODO Add integration test here
+  - npm run test:prod
 branches:
   only:
     - master

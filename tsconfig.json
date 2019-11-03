@@ -2,7 +2,7 @@
   "compilerOptions": {
     "moduleResolution": "node",
     "target": "es5",
-    "module": "es6",
+    "module": "commonjs",
     "jsx": "react",
     "lib": ["es2015", "es2016", "es2017", "dom"],
     "strict": true,
@@ -10,11 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "outDir": "dist/es",
-    "typeRoots": ["node_modules/@types"],
-    "declaration": true,
-    "declarationDir": "dist/types"
+    "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src"],
-  "exclude": ["**/*.test.*"]
+  "include": ["src", "integration_tests", "modules.d.ts"]
 }
