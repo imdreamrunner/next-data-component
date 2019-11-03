@@ -36,8 +36,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     };
 
     let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       getInitialPropsBeingCalled++;
       return { data: `hello ${name}` };
     };
@@ -74,8 +73,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     };
 
     let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       getInitialPropsBeingCalled++;
       expect(name).toBe('world');
       return { data: `hello ${name}` };
@@ -118,8 +116,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     };
 
     let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       getInitialPropsBeingCalled++;
       expect(name).toBe('world');
       return { data: `hello ${name}` };
@@ -144,7 +141,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     expect(exceptionThrown).toBe(true);
   });
 
-  it('hydrates wrongly if component data is undefined.', async () => {
+  it('detects error and throws exception when component data is undefined.', async () => {
     const ssrHtml = `<div id="component-data">hello world</div><script>window.__COMPONENT_DATA__ = window.__COMPONENT_DATA__ || {};
 window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
 
@@ -165,8 +162,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     };
 
     let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       getInitialPropsBeingCalled++;
       return { data: `hello ${name}` };
     };
@@ -195,6 +191,7 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
   });
 
   it('hydrates wrongly if component data is corrupted.', async () => {
+    // The library is unable to detect any error on the browser in this case.
     const ssrHtml = `<div id="component-data">hello world</div><script>window.__COMPONENT_DATA__ = window.__COMPONENT_DATA__ || {};
 window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
 
@@ -208,26 +205,15 @@ window.__COMPONENT_DATA__["the-cid"] = {"data":"hello world"}</script>`;
     const dom = document.getElementById('app') as HTMLDivElement;
     expect(dom).not.toBeNull();
 
-    let componentBeingRendered = 0;
     const Component = ({ data }: { data: string }) => {
-      componentBeingRendered++;
-      expect(data).toBeUndefined();
       return <div id="component-data">{data}</div>;
     };
 
-    let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
-      getInitialPropsBeingCalled++;
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       return { data: `hello ${name}` };
     };
 
     const WrappedComponent = withInitialProps(Component, getInitialProps);
-
-    expect(WrappedComponent).toBeDefined();
-    expect(WrappedComponent.getInitialProps).toBeDefined();
-
-    expect(getInitialPropsBeingCalled).toBe(0);
 
     const originalError = console.error;
     console.error = jest.fn();
