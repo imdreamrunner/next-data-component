@@ -51,23 +51,17 @@ describe('test withInitialProps in server', () => {
   });
 
   it('throws an exception when getInitialProps is not called.', async () => {
-    let componentBeingRendered = 0;
     const Component = ({ data }: { data: string }) => {
-      componentBeingRendered++;
       expect(data).toBe('hello world');
       return <div id="component-data">{data}</div>;
     };
 
-    let getInitialPropsBeingCalled = 0;
-    let getInitialProps: (ctx: any, { name }: { name: string }) => Promise<{ data: string }>;
-    getInitialProps = async (ctx: any, { name }: { name: string }) => {
-      getInitialPropsBeingCalled++;
+    const getInitialProps = async (ctx: any, { name }: { name: string }) => {
       expect(name).toBe('world');
       return { data: `hello ${name}` };
     };
 
     const WrappedComponent = withInitialProps(Component, getInitialProps);
-    expect(getInitialPropsBeingCalled).toBe(0);
 
     const originalError = console.error;
     console.error = jest.fn();
