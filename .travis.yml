@@ -1,12 +1,15 @@
+dist: xenial
+addons:
+  chrome: stable
 language: node_js
+cache: npm
 node_js:
   - '12'
-  - '10'
-  - '8'
 script:
-  - npm run test:prod
+  - npm run lint
   - npm run build
-  # TODO Add integration test here
+  - npm run test:prod
+  - npm run integration-test:prod
 branches:
   only:
     - master

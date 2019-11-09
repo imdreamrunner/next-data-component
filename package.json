@@ -19,21 +19,23 @@
     "node": ">=6.0.0"
   },
   "scripts": {
-    "prettier": "prettier --write src/**",
-    "lint": "tslint --project tsconfig.json -t codeFrame 'src/**/*.ts' 'src/**/*.tsx'",
-    "prebuild": "rimraf dist",
+    "lint": "tslint --project tsconfig.json -t codeFrame",
+    "lint:fix": "npm run lint -- --fix",
+    "lint-es": "eslint 'integration-tests/**/*.{js,jsx}'",
+    "lint-es:fix": "npm run lint-es -- --fix",
+    "prebuild": "rm -rf dist",
     "build": "npm run build:es && npm run build:commonjs && typedoc",
-    "build:es": "tsc",
-    "build:commonjs": "tsc --module commonjs --outDir dist/commonjs",
-    "start": "tsc -w",
+    "build:es": "tsc --project tsconfig.es.json",
+    "build:commonjs": "tsc --project tsconfig.commonjs.json",
     "test": "jest --coverage",
-    "test:watch": "jest --coverage --watch",
-    "test:prod": "npm run lint && npm run test -- --no-cache"
+    "test:prod": "npm run test -- --no-cache",
+    "integration-test": "nightwatch",
+    "integration-test:prod": "node run-integration-test.js"
   },
   "husky": {
     "hooks": {
       "pre-commit": "pretty-quick --staged",
-      "pre-push": "npm run lint && npm run test"
+      "pre-push": "npm run lint"
     }
   },
   "jest": {
@@ -70,21 +72,29 @@
     "@types/node": "^10.17.3",
     "@types/react": "^16.9.11",
     "@types/react-dom": "^16.9.3",
+    "@types/shelljs": "^0.8.6",
+    "chromedriver": "^78.0.1",
+    "eslint": "^6.6.0",
+    "eslint-config-prettier": "^6.5.0",
+    "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
     "husky": "^3.0.9",
     "jest": "^24.9.0",
     "jest-config": "^23.6.0",
     "jsdom": "^15.2.0",
     "lodash": "^4.17.15",
     "next": "^9.1.2",
+    "nightwatch": "^1.2.4",
     "prettier": "^1.18.2",
     "pretty-quick": "^2.0.0",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
-    "rimraf": "^2.6.2",
+    "shelljs": "^0.8.3",
     "ts-jest": "^24.1.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "tslint-config-prettier": "^1.15.0",
+    "tslint-plugin-prettier": "^2.0.1",
     "typedoc": "^0.15.0",
     "typescript": "^3.6.4"
   }
